@@ -1,0 +1,29 @@
+image: golang:1.24  # use a versão que tu precisa
+
+stages:
+  - build
+  - test
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - go version
+    - go mod tidy
+    - go build -o app
+
+unit-test-job:
+  stage: test
+  script:
+    - go test ./...
+
+lint-test-job:
+  stage: test
+  script:
+    - go vet ./...
+
+deploy-job:
+  stage: deploy
+  environment: production
+  script:
+    - echo "Deploying application..."

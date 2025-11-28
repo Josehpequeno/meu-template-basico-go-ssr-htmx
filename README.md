@@ -1,2 +1,2 @@
 # meu-template-basico-go-ssr-htmx
-Meu template basico Go ssr com htmx
+Meu template básico go ssr com htmx

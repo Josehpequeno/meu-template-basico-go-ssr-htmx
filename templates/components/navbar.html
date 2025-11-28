@@ -1,0 +1,79 @@
+{{define "navbar"}}
+
+<header
+  class="relative top-0 left-0 w-full z-10 bg-white/80 backdrop-blur-sm dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
+    <a href="/" class="flex items-center gap-2">
+      <img src="/public/brasao.webp" alt="Uespi Logo" class="h-8 w-auto" />
+      <span class="text-lg font-semibold text-slate-900 dark:text-slate-100">{{.AppName}}</span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-6">
+      {{if or (eqRole .User.Role "normal") (eqRole .User.Role "master")}}
+      {{template "navbarLinks" .}}
+      {{end}}
+    </nav>
+
+    <div class="flex items-center gap-4">
+      {{if or (eqRole .User.Role "normal") (eqRole .User.Role "master")}}
+      <!-- Mobile menu toggle -->
+      <button id="toggleOpen" class="lg:hidden p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+        aria-label="Abrir menu" onclick="toggleMenuMobile()">
+        <svg class="w-6 h-6 fill-slate-800 dark:fill-white dark:stroke-white" viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd"
+            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+            clip-rule="evenodd"></path>
+        </svg>
+      </button>
+      {{end}}
+
+      <!-- Perfil dropdown -->
+      <div class="relative z-[100]">
+        <button id="dropdownDefaultButton"
+          class="flex items-center gap-2 p-1.5 rounded-2xl hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+          onclick="toggleDropdown()">
+          {{if .User.Picture}}
+          <img src="data:image/png;base64,{{.User.Picture}}" alt="Avatar" class="h-8 w-8 rounded-full" />
+          {{else}}
+          <div class="h-8 w-8 rounded-full bg-slate-300 dark:bg-slate-600 flex items-center justify-center">
+            <svg class="h-5 w-5 text-slate-500 dark:text-slate-300" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" />
+              <path fill-rule="evenodd" d="M12 14c-4 0-8 2-8 6v2h16v-2c0-4-4-6-8-6z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          {{end}} {{if .User.Username}}<span
+            class="text-sm text-slate-800 dark:text-slate-200">{{.User.Username}}</span>{{end}}
+        </button>
+        <ul id="dropdownMenu"
+          class="hidden absolute right-0 w-full bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg shadow-lg py-1 z-[100]">
+          <li>
+            <a href="/perfil"
+              class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition rounded-md">
+              Perfil
+            </a>
+          </li>
+          <li>
+            <a href="/logout" hx-get="/logout" hx-trigger="click" hx-target="body" hx-swap="outerHTML"
+              class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition rounded-md">
+              Sair
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu"
+    class="lg:hidden absolute w-full hidden bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 z-[100]">
+    <nav class="flex flex-col px-4 py-4 space-y-2">
+      {{if or (eqRole .User.Role "normal") (eqRole .User.Role "master")}}
+      {{template "navbarLinks" .}}
+      {{end}}
+    </nav>
+  </div>
+
+</header>
+<script src="/public/navbar.min.js" defer></script>
+{{end}}
